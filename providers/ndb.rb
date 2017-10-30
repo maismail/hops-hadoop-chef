@@ -52,6 +52,15 @@ action :install_ndb_hops do
     action :create_if_missing
   end
 
+  remote_file "#{node['hops']['dir']}/ndb-hops-#{node['hops']['version']}-#{node['ndb']['version']}/#{node['ndb']['libndb']}" do
+    source node['hops']['libndb_url']
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode "0755"
+    # TODO - checksum
+    action :create_if_missing
+  end
+
   link "#{node['hops']['dir']}/ndb-hops/libhopsyarn.so" do
     owner node['hops']['hdfs']['user']
     group node['hops']['group']
@@ -84,9 +93,9 @@ action :install_ndb_hops do
     only_if "test -L #{node['hops']['home']}/lib/native/libndbclient.so"
   end
   link "#{node['hops']['home']}/lib/native/libndbclient.so" do
-    owner "root"
-    group "root"
-    to "#{node['mysql']['dir']}/mysql/lib/libndbclient.so"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    to "#{node['hops']['dir']}/ndb-hops-#{node['hops']['version']}-#{node['ndb']['version']}/#{node['ndb']['libndb']}"
   end
 
   link "#{node['hops']['home']}/lib/native/libhopsyarn.so" do

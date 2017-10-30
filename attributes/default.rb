@@ -179,7 +179,8 @@ default['hops']['log']['maxbackupindex']       = 10
 ###################################################################
 
 # set the location of libndbclient.so. set-env.sh sets LD_LIBRARY_PATH to find this library.
-default['ndb']['libndb']                    = "#{node['mysql']['version_dir']}/lib"
+default['ndb']['libndb']                    = "libndbclient.so.#{node['ndb']['libndb_version']}"
+default['hops']['libndb_url']                = "#{node['download_url']}/hops-libndbclient/#{node['ndb']['version']}/#{node['ndb']['libndb']}"
 default['mysql']['port']                    = default['ndb']['mysql_port']
 default['hadoop']['mysql_url']              = "jdbc:mysql://#{node['ndb']['mysql_ip']}:#{default['ndb']['mysql_port']}/"
 
