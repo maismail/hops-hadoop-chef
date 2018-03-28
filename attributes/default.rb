@@ -41,7 +41,8 @@ default['hops']['hdfs']['user_home']           = "/user"
 default['hops']['hdfs']['blocksize']           = "134217728"
 default['hops']['hdfs']['umask']               = "0022"
 
-default['hops']['url']['primary']              = node['download_url'] + "/hops-" + node['hops']['version'] + ".tgz"
+default['test_download_url']                        = node['download_url']+"/maism"
+default['hops']['url']['primary']              = default['test_download_url'] + "/hops-" + node['hops']['version'] + ".tgz"
 default['hops']['url']['secondary']            = "https://www.hops.site/hops-" + node['hops']['version'] + ".tgz"
 
 default['hops']['install_protobuf']            = "false"
@@ -197,12 +198,12 @@ default['hops']['log_level']                = "DEBUG"
 
 default['hops']['hdfs']['blocksize']        = "134217728"
 
-default['dal']['download_url']              = "#{node['download_url']}/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
-default['dal']['lib_url']                   = "#{node['download_url']}/libhopsyarn-#{node['hops']['version']}-#{node['ndb']['version']}.so"
-default['nvidia']['download_url']           = "#{node['download_url']}/nvidia-management-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
-default['hops']['libnvml_url']              = "#{node['download_url']}/libhopsnvml-#{node['hops']['version']}.so"
+default['dal']['download_url']              = "#{default['test_download_url']}/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
+default['dal']['lib_url']                   = "#{default['test_download_url']}/libhopsyarn-#{node['hops']['version']}-#{node['ndb']['version']}.so"
+default['nvidia']['download_url']           = "#{default['test_download_url']}/nvidia-management-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
+default['hops']['libnvml_url']              = "#{default['test_download_url']}/libhopsnvml-#{node['hops']['version']}.so"
 
-default['dal']['schema_url']                = "#{node['download_url']}/hops-#{node['hops']['version']}-#{node['ndb']['version']}.sql"
+default['dal']['schema_url']                = "#{default['test_download_url']}/hops-#{node['hops']['version']}-#{node['ndb']['version']}.sql"
 
 default['hops']['recipes']                  = %w{ nn dn rm nm jhs ps }
 
@@ -335,7 +336,7 @@ default['hops']['capacity']['queue_mapping_override']['enable']         = "false
 
 #
 # Flyway - Database upgrades
-# 
+#
 default['hops']['flyway']['version']                                    = "5.0.3"
 default['hops']['flyway_url']                                           = node['download_url'] + "/flyway-commandline-#{node['hops']['flyway']['version']}-linux-x64.tar.gz"
 
