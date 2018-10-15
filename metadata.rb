@@ -501,6 +501,26 @@ attribute "hopsworks/default/private_ips",
           :description => "Hopsworks private ip",
           :type => "string"
 
+attribute "hops/nn/private_ips_domainIds",
+          :description => "private_ips to LocationDomainIds for namenodes",
+          :type => "hash"
+
+attribute "hops/dn/private_ips_domainIds",
+          :description => "private_ips to LocationDomainIds for datanodes",
+          :type => "hash"
+
+attribute "hops/topology",
+          :description => "'true' or 'false' - true to enable the network topology",
+          :type => "string"
+
+attribute "hops/metrics/use_graphite",
+          :description => "'true' or 'false' - true to use graphite as a sink for metrics",
+          :type => "string"
+
+attribute "hops/nn/enable_retrycache",
+          :description => "'true' or 'false' - true to enable retryCache",
+          :type => "string"
+          
 # Kernel tuning parameters
 attribute "hops/kernel/somaxconn",
           :description => "net.core.somaxconn value",

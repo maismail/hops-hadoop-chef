@@ -93,7 +93,7 @@ template "#{node['hops']['home']}/sbin/root-drop-and-recreate-hops-db.sh" do
   source "root-drop-and-recreate-hops-db.sh.erb"
   owner "root"
   mode "700"
-  action :create  
+  action :create
 end
 
 template "#{node['hops']['home']}/sbin/drop-and-recreate-hops-db.sh" do
@@ -101,7 +101,7 @@ template "#{node['hops']['home']}/sbin/drop-and-recreate-hops-db.sh" do
   owner node['hops']['hdfs']['user']
   group node['hops']['group']
   mode "771"
-  action :create  
+  action :create
 end
 
 
@@ -232,7 +232,7 @@ if my_ip.eql? node['hops']['nn']['private_ips'][0]
       group node['hops']['group']
       mode "1750"
     end
-    
+
   exec = "#{node['ndb']['scripts_dir']}/mysql-client.sh"
   bash 'insert_hopsworks_as_hdfs_superuser' do
     user "root"

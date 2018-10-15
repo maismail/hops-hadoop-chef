@@ -252,7 +252,7 @@
     <name>hops.crl.validation.enabled</name>
     <value><%= node['hops']['tls']['crl_enabled'] %></value>
   </property>
-  
+
   <property>
     <name>hops.crl.fetcher.class</name>
     <value><%= node['hops']['tls']['crl_fetcher_class'] %></value>
@@ -274,5 +274,10 @@
   </property>
 
   <% end -%>
- 
+<% if node['hops']['topology'].eql? "true" -%>
+ <property>
+   <name>net.topology.script.file.name</name>
+   <value><%=node['hops']['conf_dir']%>/get-topology.sh</value>
+ </property>
+<% end -%>
 </configuration>

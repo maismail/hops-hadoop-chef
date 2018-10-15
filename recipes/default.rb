@@ -333,3 +333,21 @@ if node['hops']['tls']['enabled'].eql? "true"
          EOH
   end
 end
+
+if node['hops']['topology'].eql? "true"
+  template "#{node['hops']['conf_dir']}/get-topology.sh" do
+    source "get-topology.sh.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode "755"
+    action :create
+  end
+
+  template "#{node['hops']['conf_dir']}/topology" do
+    source "topology.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode "755"
+    action :create
+  end
+end
