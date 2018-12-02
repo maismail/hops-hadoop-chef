@@ -209,7 +209,7 @@
 
   <property>
     <name>dfs.namenode.quota.enabled</name>
-    <value>true</value>
+    <value><%= node['hops']['hdfs']['quota_enabled'] %></value>
     <description></description>
   </property>
 

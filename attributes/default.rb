@@ -411,3 +411,5 @@ default['hops']['topology']                           = "false"
 # graphite metrics
 default['hops']['metrics']['use_graphite']            = "true"
 default['hops']['nn']['enable_retrycache']            = "true"
+
+default['hops']['hdfs']['quota_enabled']              = "true"

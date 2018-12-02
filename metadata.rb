@@ -520,6 +520,10 @@ attribute "hops/metrics/use_graphite",
 attribute "hops/nn/enable_retrycache",
           :description => "'true' or 'false' - true to enable retryCache",
           :type => "string"
+
+attribute "hops/hdfs/quota_enabled",
+          :description => "'true' or 'false' - true to enable hdfs quota. Default is true.",
+          :type => "string"
           
 # Kernel tuning parameters
 attribute "hops/kernel/somaxconn",
