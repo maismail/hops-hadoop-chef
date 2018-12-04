@@ -84,7 +84,8 @@ template "#{node['hops']['conf_dir']}/hdfs-site.xml" do
               :firstNN => myNN,
               :cache => cache,
               :partition_key => partition_key,
-              :nnHTTPAddress => nnHTTPAddress
+              :nnHTTPAddress => nnHTTPAddress,
+              :locationDomainId => node['hops']['nn']['private_ips_domainIds'][my_ip]
             })
   action :create
 end
