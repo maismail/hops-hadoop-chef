@@ -53,7 +53,7 @@ template "#{flyway_basedir}/flyway/conf/flyway.conf" do
   variables({
               :mysql_host => my_ip
             })
-  action :create  
+  action :create
 end
 
 directory "#{flyway_basedir}/flyway/undo" do
@@ -63,7 +63,7 @@ directory "#{flyway_basedir}/flyway/undo" do
 end
 
 remote_file "#{flyway_basedir}/flyway/sql/V0.0.2__initial_tables.sql" do
-  source "#{node['download_url']}/schema.sql"
+  source "#{node['download_url']}/maism/hops-schemas/schema.sql"
   owner node['hops']['hdfs']['user']
   mode 0750
   action :create_if_missing
@@ -82,7 +82,7 @@ versions.push(flyway_version)
 prev="2.8.2.1"
 for version in versions do
   remote_file "#{flyway_basedir}/flyway/sql/V#{version}__hops.sql" do
-    source "#{node['download_url']}/update-schema_#{prev}_to_#{version}.sql"
+    source "#{node['download_url']}/maism/hops-schemas/update-schema_#{prev}_to_#{version}.sql"
     owner node['hops']['hdfs']['user']
     mode 0750
     action :create_if_missing
@@ -150,7 +150,7 @@ if node['hops'].attribute?('nn') == true && node['hops']['nn'].attribute?(:priva
       group node['hops']['group']
       mode 0770
     end
-  end 
+  end
 
 
   Chef::Log.info "NameNode format option: #{node['hops']['nn']['format_options']}"
@@ -165,7 +165,7 @@ if node['hops'].attribute?('nn') == true && node['hops']['nn'].attribute?(:priva
               })
   end
 
-  
+
   #  for nn_ip in node['hops']['nn']['private_ips']
   if my_ip.eql? node['hops']['nn']['private_ips'][0]
     # Wait for db to start accepting requests (can be slow sometimes)
