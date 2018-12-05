@@ -413,3 +413,4 @@ default['hops']['metrics']['use_graphite']            = "true"
 default['hops']['nn']['enable_retrycache']            = "true"
 
 default['hops']['hdfs']['quota_enabled']              = "true"
+default['hops']['nn']['handler_count']                = 120

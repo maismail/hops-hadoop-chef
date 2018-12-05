@@ -58,7 +58,7 @@
 
   <property>
     <name>dfs.namenode.handler.count</name>
-    <value>120</value>
+    <value><%= node['hops']['nn']['handler_count'] %></value>
     <description>The RPC server that listens to requests from clients</description>
   </property>
 

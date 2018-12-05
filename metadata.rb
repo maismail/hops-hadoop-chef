@@ -524,7 +524,11 @@ attribute "hops/nn/enable_retrycache",
 attribute "hops/hdfs/quota_enabled",
           :description => "'true' or 'false' - true to enable hdfs quota. Default is true.",
           :type => "string"
-          
+
+attribute "hops/nn/handler_count",
+          :description => "Number of RPC handlers",
+          :type => "string" 
+
 # Kernel tuning parameters
 attribute "hops/kernel/somaxconn",
           :description => "net.core.somaxconn value",
