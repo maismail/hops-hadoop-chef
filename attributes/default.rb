@@ -45,7 +45,7 @@ default['hops']['hdfs']['user_home']           = "/user"
 default['hops']['hdfs']['blocksize']           = "134217728"
 default['hops']['hdfs']['umask']               = "0022"
 
-default['hops']['url']['primary']              = node['download_url'] + "/maism/hops-" + node['hops']['version'] + ".tgz"
+default['hops']['url']['primary']              = node['download_url'] + "/hops-" + node['hops']['version'] + ".tgz"
 default['hops']['url']['secondary']            = "https://www.hops.site/hops-" + node['hops']['version'] + ".tgz"
 
 default['hops']['install_protobuf']            = "false"
@@ -199,8 +199,8 @@ default['hops']['log_level']                = "DEBUG"
 
 default['hops']['hdfs']['blocksize']        = "134217728"
 
-default['dal']['download_url']              = "#{node['download_url']}/maism/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
-default['dal']['lib_url']                   = "#{node['download_url']}/maism/libhopsyarn-#{node['hops']['version']}-#{node['ndb']['version']}.so"
+default['dal']['download_url']              = "#{node['download_url']}/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
+default['dal']['lib_url']                   = "#{node['download_url']}/libhopsyarn-#{node['hops']['version']}-#{node['ndb']['version']}.so"
 default['nvidia']['download_url']           = "#{node['download_url']}/nvidia-management-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
 default['hops']['libnvml_url']              = "#{node['download_url']}/libhopsnvml-#{node['hops']['version']}.so"
 

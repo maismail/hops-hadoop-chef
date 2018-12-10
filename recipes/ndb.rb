@@ -63,7 +63,7 @@ directory "#{flyway_basedir}/flyway/undo" do
 end
 
 remote_file "#{flyway_basedir}/flyway/sql/V0.0.2__initial_tables.sql" do
-  source "#{node['download_url']}/maism/hops-schemas/schema.sql"
+  source "#{node['download_url']}/hops-schemas/schema.sql"
   owner node['hops']['hdfs']['user']
   mode 0750
   action :create_if_missing
@@ -82,7 +82,7 @@ versions.push(flyway_version)
 prev="2.8.2.1"
 for version in versions do
   remote_file "#{flyway_basedir}/flyway/sql/V#{version}__hops.sql" do
-    source "#{node['download_url']}/maism/hops-schemas/update-schema_#{prev}_to_#{version}.sql"
+    source "#{node['download_url']}/hops-schemas/update-schema_#{prev}_to_#{version}.sql"
     owner node['hops']['hdfs']['user']
     mode 0750
     action :create_if_missing
