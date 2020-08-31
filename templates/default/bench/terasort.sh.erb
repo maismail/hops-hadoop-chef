@@ -1,0 +1,45 @@
+#!/bin/bash
+
+trap "" HUP
+
+#if [ $EUID -eq 0 ]; then
+#   echo "this script must not be run as root. su to hdfs user to run"
+#   exit 1
+#fi
+
+export PATH=<%=node['hops']['bin_dir']%>:$PATH
+
+MR_EXAMPLES_JAR=<%= node['hops']['share_dir']%>/mapreduce/hadoop-mapreduce-examples-*.jar
+
+#SIZE=500G
+#SIZE=100G
+#SIZE=1T
+SIZE=1G
+#SIZE=10G
+#INPUT=/${SIZE}-terasort-input
+#OUTPUT=/${SIZE}-terasort-output
+
+
+LOGDIR=logs
+
+if [ ! -d "$LOGDIR" ]
+then
+    mkdir ./$LOGDIR
+fi
+
+DATE=`date +%Y-%m-%d:%H:%M:%S`
+
+RESULTSFILE="./$LOGDIR/terasort_results_$DATE"
+
+
+INPUT=/data/sandbox/poc/teragen/${SIZE}-terasort-input
+OUTPUT=/data/sandbox/poc/teragen/${SIZE}-terasort-output
+
+# terasort.sh
+# Kill any running MapReduce jobs
+mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
+# Delete the output directory
+hadoop fs -rm -r -f -skipTrash ${OUTPUT}
+
+# Run terasort
+time hadoop jar $MR_EXAMPLES_JAR terasort ${INPUT} ${OUTPUT}
