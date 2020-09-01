@@ -8,7 +8,6 @@ trap "" HUP
 #fi
 
 source <%=node['hops']['conf_dir']%>/hadoop-env.sh 
-
 export PATH=<%=node['hops']['bin_dir']%>:$PATH
 
 MR_EXAMPLES_JAR=<%= node['hops']['share_dir']%>/mapreduce/hadoop-mapreduce-examples-*.jar
@@ -44,4 +43,11 @@ mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
 hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 
 # Run terasort
-time hadoop jar $MR_EXAMPLES_JAR terasort ${INPUT} ${OUTPUT}
+time hadoop jar $MR_EXAMPLES_JAR terasort \
+-Dmapreduce.job.reduces=15 \
+-Dmapreduce.map.output.compress=true \
+-Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
+-Dmapreduce.input.fileinputformat.split.minsize=134217728 \
+${INPUT} ${OUTPUT}
+
+#-Dmapreduce.job.maps=90 \

@@ -41,4 +41,7 @@ mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
 # Delete the output directory
 hadoop fs -rm -r -f -skipTrash ${REPORT}
 # Run teravalidate
-time hadoop jar $MR_EXAMPLES_JAR teravalidate ${OUTPUT} ${REPORT}
+time hadoop jar $MR_EXAMPLES_JAR teravalidate \
+-Dmapreduce.map.tasks=30 \
+-Dmapreduce.reduce.tasks=30 \
+${OUTPUT} ${REPORT}

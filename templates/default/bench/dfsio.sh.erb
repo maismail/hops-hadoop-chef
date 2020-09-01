@@ -12,7 +12,7 @@ source <%=node['hops']['conf_dir']%>/hadoop-env.sh
 export PATH=<%=node['hops']['bin_dir']%>:$PATH
 
 DFSIO_JAR=<%= @dfsio_jar%>
-FILES=10
+FILES=20
 FILESIZE=1GB
 
 LOGDIR=logs
@@ -34,12 +34,16 @@ DFSIO_READ_OUTPUT_FILE="./$LOGDIR/dfsio_read_results.txt_$DATE"
 echo Running DFSIO CLEAN job
 echo ===============================================================
 yarn jar $DFSIO_JAR TestDFSIO \
+-Dmapreduce.map.output.compress=true \
+-Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -clean
 
 
 echo Running DFSIO WRITE job
 echo ===============================================================
 yarn jar $DFSIO_JAR TestDFSIO \
+-Dmapreduce.map.output.compress=true \
+-Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -write -nrFiles $FILES \
 -fileSize $FILESIZE \
 -resFile $DFSIO_WRITE_OUTPUT_FILE
@@ -49,6 +53,8 @@ yarn jar $DFSIO_JAR TestDFSIO \
 echo Running DFSIO READ job
 echo ===============================================================
 yarn jar $DFSIO_JAR TestDFSIO \
+-Dmapreduce.map.output.compress=true \
+-Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -read -nrFiles $FILES \
 -fileSize $FILESIZE \
 -resFile $DFSIO_READ_OUTPUT_FILE

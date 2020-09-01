@@ -8,9 +8,14 @@ trap "" HUP
 #fi
 
 
-DFSIO_JAR=/home/hadoop/hadoop-mapreduce-client-jobclient-3.2.0.0-EE-SNAPSHOT-tests.jar
+source <%=node['hops']['conf_dir']%>/hadoop-env.sh 
+
+export PATH=<%=node['hops']['bin_dir']%>:$PATH
+
+DFSIO_JAR=<%= @dfsio_jar%>
+
 FILES=10
-FILESIZE=1GB
+FILESIZE=1024
 
 LOGDIR=logs
 

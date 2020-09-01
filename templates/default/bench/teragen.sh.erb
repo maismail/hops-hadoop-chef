@@ -48,4 +48,9 @@ mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
 hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 
 # Run teragen
-time hadoop jar $MR_EXAMPLES_JAR teragen ${ROWS} ${OUTPUT} 
+time hadoop jar $MR_EXAMPLES_JAR teragen \
+-Dmapreduce.map.output.compress=true \
+-Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
+-Dmapreduce.job.maps=30 \
+-Dmapreduce.job.reduces=15 \
+${ROWS} ${OUTPUT} &> ${RESULTSFILE} 
