@@ -1,0 +1,49 @@
+#!/bin/bash
+
+trap "" HUP
+
+#if [ $EUID -eq 0 ]; then
+#   echo "this script must not be run as root. su to hdfs user to run"
+#   exit 1
+#fi
+
+export PATH=<%=node['hops']['bin_dir']%>:$PATH
+
+DFSIO_JAR=<%= @dfsio_jar%>
+FILES=10
+FILESIZE=1GB
+
+LOGDIR=logs
+
+if [ ! -d "$LOGDIR" ]
+then
+    mkdir ./$LOGDIR
+fi
+
+DATE=`date +%Y-%m-%d:%H:%M:%S`
+
+INPUT_HDFS = "/dfsioe-test"
+WRITE_OPTION="-write -nrFiles ${FILES} -fileSize ${FILESIZE} -bufferSize 4096 -plotInteval 1000 -sampleUnit m -sampleInteval 200 -sumThreshold 0.5 -tputReportTotal -Dtest.build.data=${INPUT_HDFS}"
+READ_OPTION="-read -nrFiles ${FILES} -fileSize ${FILESIZE} -bufferSize 131072 -plotInteval 1000 -sampleUnit m -sampleInteval 200 -sumThreshold 0.5 -tputReportTotal -Dtest.build.data=${INPUT_HDFS}"
+
+
+DFSIO_WRITE_OUTPUT_FILE="./$LOGDIR/dfsioe_write_results.txt_$DATE"
+DFSIO_WRITE_THROUGHPUT_OUTPUT_FILE="./$LOGDIR/dfsioe_write_throughput_results.csv_$DATE"
+
+DFSIO_READ_OUTPUT_FILE="./$LOGDIR/dfsioe_read_results.txt_$DATE"
+DFSIO_READ_THROUGHPUT_OUTPUT_FILE="./$LOGDIR/dfsioe_read_throughput_results.txt_$DATE"
+
+
+echo Running DFSIOe WRITE job
+echo ===============================================================
+yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIOEnh  \
+${WRITE_OPTION} -resFile ${DFSIO_WRITE_OUTPUT_FILE}  \
+    -tputFile ${DFSIO_WRITE_THROUGHPUT_OUTPUT_FILE}
+
+
+
+echo Running DFSIOe READ job
+echo ===============================================================
+yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIOEnh  \
+${READ_OPTION} -resFile ${DFSIO_READ_OUTPUT_FILE}  \
+    -tputFile ${DFSIO_READ_THROUGHPUT_OUTPUT_FILE}

@@ -26,6 +26,16 @@ template "#{bench_dir}/dfsio.sh" do
     })
 end
 
+template "#{bench_dir}/dfsioe.sh" do
+    source "bench/dfsioe.sh.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode 0750
+    variables({
+      :dfsio_jar => "#{bench_dir}/#{test_jar}"
+    })
+end
+
 template "#{bench_dir}/teragen.sh" do
     source "bench/teragen.sh.erb"
     owner node['hops']['hdfs']['user']
