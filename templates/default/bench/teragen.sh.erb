@@ -7,8 +7,8 @@ trap "" HUP
 #   exit 1
 #fi
 
+source <%=node['hops']['conf_dir']%>/hadoop-env.sh 
 export PATH=<%=node['hops']['bin_dir']%>:$PATH
-
 
 #SIZE=500G
 #ROWS=5000000000

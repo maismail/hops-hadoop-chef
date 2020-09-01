@@ -217,7 +217,7 @@ esac
 
 # Default log4j setting for interactive commands
 # Java property: hadoop.root.logger
- export HADOOP_ROOT_LOGGER=<%= node['hops']['logging_level'] %>,RFA
+ export HADOOP_ROOT_LOGGER=<%= node['hops']['logging_level'] %>,console,RFA
 
 # Default log4j setting for daemons spawned explicitly by
 # --daemon option of hadoop, hdfs, mapred and yarn command.

@@ -7,6 +7,8 @@ trap "" HUP
 #   exit 1
 #fi
 
+source <%=node['hops']['conf_dir']%>/hadoop-env.sh 
+
 export PATH=<%=node['hops']['bin_dir']%>:$PATH
 
 DFSIO_JAR=<%= @dfsio_jar%>
