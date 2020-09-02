@@ -58,6 +58,13 @@ template "#{bench_dir}/dfsops.sh" do
     mode 0750
 end
 
+template "#{bench_dir}/run_dfsops.sh" do
+    source "bench/run_dfsops.sh.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode 0750
+end
+
 template "#{bench_dir}/teragen.sh" do
     source "bench/teragen.sh.erb"
     owner node['hops']['hdfs']['user']
@@ -94,6 +101,17 @@ file "#{bench_dir}/bench_nodes" do
     group node['hops']['group']
     mode '644'
     content bench_nodes.to_s
+    action :create
+end
+
+master_nodes = node['hops']['nn']['private_ips'].join("\n")
+master_nodes += "\n"
+
+file "#{bench_dir}/master_nodes" do
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode '644'
+    content master_nodes.to_s
     action :create
 end
 

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FILES=100
+#FileSize in MB
+FILESIZE=10
+
+./dfsioe.sh $FILES $FILESIZE
+
+TEST_DIR1=/dfsioe-test/io_control
+TEST_DIR2=/dfsioe-test/io_data
+
+./dfsioe.sh $TEST_DIR1
+
+./dfsioe.sh $TEST_DIR2
