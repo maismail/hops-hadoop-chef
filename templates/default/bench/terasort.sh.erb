@@ -15,17 +15,17 @@ MR_EXAMPLES_JAR=<%= node['hops']['share_dir']%>/mapreduce/hadoop-mapreduce-examp
 #SIZE=500G
 #SIZE=100G
 #SIZE=1T
-SIZE=1G
-#SIZE=10G
+#SIZE=1G
+SIZE=10G
 #INPUT=/${SIZE}-terasort-input
 #OUTPUT=/${SIZE}-terasort-output
 
 
-LOGDIR=logs
+LOGDIR=logs/terasort/$SIZE
 
 if [ ! -d "$LOGDIR" ]
 then
-    mkdir ./$LOGDIR
+    mkdir -p ./$LOGDIR
 fi
 
 DATE=`date +%Y-%m-%d:%H:%M:%S`
@@ -43,11 +43,19 @@ mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
 hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 
 # Run terasort
-time hadoop jar $MR_EXAMPLES_JAR terasort \
+{ time hadoop jar $MR_EXAMPLES_JAR terasort \
+-Dmapreduce.map.cpu.vcores=1 \
+-Dmapreduce.map.java.opts=-Xmx1229m \
+-Dmapreduce.map.memory.mb=1536 \
+-Dmapreduce.reduce.cpu.vcores=1 \
+-Dmapreduce.reduce.memory.mb=3072 \
+-Dmapreduce.reduce.java.opts=-Xmx2458m \
+-Dmapreduce.task.io.sort.mb=200 \
+-Dmapreduce.task.io.sort.factor=48 \
 -Dmapreduce.job.reduces=15 \
 -Dmapreduce.map.output.compress=true \
 -Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -Dmapreduce.input.fileinputformat.split.minsize=134217728 \
-${INPUT} ${OUTPUT}
+${INPUT} ${OUTPUT} ;} > ${RESULTSFILE} 2>&1 
 
 #-Dmapreduce.job.maps=90 \

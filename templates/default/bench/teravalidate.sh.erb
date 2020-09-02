@@ -15,15 +15,15 @@ MR_EXAMPLES_JAR=<%= node['hops']['share_dir']%>/mapreduce/hadoop-mapreduce-examp
 #SIZE=500G
 #SIZE=100G
 #SIZE=1T
-SIZE=1G
-#SIZE=10G
+#SIZE=1G
+SIZE=10G
 
 
-LOGDIR=logs
+LOGDIR=logs/terasort/$SIZE
 
 if [ ! -d "$LOGDIR" ]
 then
-    mkdir ./$LOGDIR
+    mkdir -p ./$LOGDIR
 fi
 
 DATE=`date +%Y-%m-%d:%H:%M:%S`
@@ -41,7 +41,15 @@ mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
 # Delete the output directory
 hadoop fs -rm -r -f -skipTrash ${REPORT}
 # Run teravalidate
-time hadoop jar $MR_EXAMPLES_JAR teravalidate \
+{ time hadoop jar $MR_EXAMPLES_JAR teravalidate \
+-Dmapreduce.map.cpu.vcores=1 \
+-Dmapreduce.map.java.opts=-Xmx1229m \
+-Dmapreduce.map.memory.mb=1536 \
+-Dmapreduce.reduce.cpu.vcores=1 \
+-Dmapreduce.reduce.memory.mb=3072 \
+-Dmapreduce.reduce.java.opts=-Xmx2458m \
+-Dmapreduce.task.io.sort.mb=200 \
+-Dmapreduce.task.io.sort.factor=48 \
 -Dmapreduce.map.tasks=30 \
 -Dmapreduce.reduce.tasks=30 \
-${OUTPUT} ${REPORT}
+${OUTPUT} ${REPORT} ; } > ${RESULTSFILE} 2>&1 

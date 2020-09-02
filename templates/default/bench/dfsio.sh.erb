@@ -15,11 +15,11 @@ DFSIO_JAR=<%= @dfsio_jar%>
 FILES=20
 FILESIZE=1GB
 
-LOGDIR=logs
+LOGDIR=logs/dfsio/$SIZE
 
 if [ ! -d "$LOGDIR" ]
 then
-    mkdir ./$LOGDIR
+    mkdir -p ./$LOGDIR
 fi
 
 DATE=`date +%Y-%m-%d:%H:%M:%S`
@@ -30,10 +30,22 @@ DFSIO_WRITE_OUTPUT_FILE="./$LOGDIR/dfsio_write_results.txt_$DATE"
 DFSIO_READ_OUTPUT_FILE="./$LOGDIR/dfsio_read_results.txt_$DATE"
 
 
+DFSIO_WRITE_LOG_OUTPUT_FILE="./$LOGDIR/dfsio_write_log.txt_$DATE"
+
+DFSIO_READ_READ_OUTPUT_FILE="./$LOGDIR/dfsio_read_log.txt_$DATE"
+
 
 echo Running DFSIO CLEAN job
 echo ===============================================================
-yarn jar $DFSIO_JAR TestDFSIO \
+yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIO \
+-Dmapreduce.map.cpu.vcores=1 \
+-Dmapreduce.map.java.opts=-Xmx1229m \
+-Dmapreduce.map.memory.mb=1536 \
+-Dmapreduce.reduce.cpu.vcores=1 \
+-Dmapreduce.reduce.memory.mb=3072 \
+-Dmapreduce.reduce.java.opts=-Xmx2458m \
+-Dmapreduce.task.io.sort.mb=200 \
+-Dmapreduce.task.io.sort.factor=48 \
 -Dmapreduce.map.output.compress=true \
 -Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -clean
@@ -41,20 +53,36 @@ yarn jar $DFSIO_JAR TestDFSIO \
 
 echo Running DFSIO WRITE job
 echo ===============================================================
-yarn jar $DFSIO_JAR TestDFSIO \
+{ yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIO \
+-Dmapreduce.map.cpu.vcores=1 \
+-Dmapreduce.map.java.opts=-Xmx1229m \
+-Dmapreduce.map.memory.mb=1536 \
+-Dmapreduce.reduce.cpu.vcores=1 \
+-Dmapreduce.reduce.memory.mb=3072 \
+-Dmapreduce.reduce.java.opts=-Xmx2458m \
+-Dmapreduce.task.io.sort.mb=200 \
+-Dmapreduce.task.io.sort.factor=48 \
 -Dmapreduce.map.output.compress=true \
 -Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -write -nrFiles $FILES \
 -fileSize $FILESIZE \
--resFile $DFSIO_WRITE_OUTPUT_FILE
+-resFile $DFSIO_WRITE_OUTPUT_FILE ; } > ${DFSIO_WRITE_LOG_OUTPUT_FILE} 2>&1
 
 
 
 echo Running DFSIO READ job
 echo ===============================================================
-yarn jar $DFSIO_JAR TestDFSIO \
+{ yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIO \
+-Dmapreduce.map.cpu.vcores=1 \
+-Dmapreduce.map.java.opts=-Xmx1229m \
+-Dmapreduce.map.memory.mb=1536 \
+-Dmapreduce.reduce.cpu.vcores=1 \
+-Dmapreduce.reduce.memory.mb=3072 \
+-Dmapreduce.reduce.java.opts=-Xmx2458m \
+-Dmapreduce.task.io.sort.mb=200 \
+-Dmapreduce.task.io.sort.factor=48 \
 -Dmapreduce.map.output.compress=true \
 -Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -read -nrFiles $FILES \
 -fileSize $FILESIZE \
--resFile $DFSIO_READ_OUTPUT_FILE
+-resFile $DFSIO_READ_OUTPUT_FILE ; } > ${DFSIO_READ_LOG_OUTPUT_FILE} 2>&1

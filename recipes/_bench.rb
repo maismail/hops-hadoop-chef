@@ -1,3 +1,5 @@
+dfsioe_jar = "autogen-8.0-SNAPSHOT-jar-with-dependencies.jar"
+dfsioe_jar_url = "https://repo.hops.works/dev/maism/HiBench/#{dfsioe_jar}"
 
 bench_dir = "#{node['install']['dir']}/benchmarks"
 
@@ -7,9 +9,8 @@ directory bench_dir do
     action :create
 end
 
-test_jar = "hadoop-mapreduce-client-jobclient-3.2.0.0-EE-SNAPSHOT-tests.jar" 
-cookbook_file "#{bench_dir}/#{test_jar}" do
-    source test_jar
+remote_file "#{bench_dir}/#{dfsioe_jar}" do
+    source dfsioe_jar_url
     owner node['hops']['hdfs']['user']
     group node['hops']['group']
     mode "755"
@@ -22,7 +23,7 @@ template "#{bench_dir}/dfsio.sh" do
     group node['hops']['group']
     mode 0750
     variables({
-      :dfsio_jar => "#{bench_dir}/#{test_jar}"
+      :dfsio_jar => "#{bench_dir}/#{dfsioe_jar}"
     })
 end
 
@@ -32,7 +33,7 @@ template "#{bench_dir}/dfsioe.sh" do
     group node['hops']['group']
     mode 0750
     variables({
-      :dfsio_jar => "#{bench_dir}/#{test_jar}"
+      :dfsio_jar => "#{bench_dir}/#{dfsioe_jar}"
     })
 end
 
