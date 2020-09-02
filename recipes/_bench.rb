@@ -10,8 +10,7 @@ package "tmux" do
     action :install
 end
 
-dfsioe_jar = "autogen-8.0-SNAPSHOT-jar-with-dependencies.jar"
-dfsioe_jar_url = "https://repo.hops.works/dev/maism/HiBench/#{dfsioe_jar}"
+dfsioe_jar = "hadoop-mapreduce-client-jobclient-3.2.0.0-EE-SNAPSHOT-tests.jar"
 
 bench_dir = "#{node['install']['dir']}/benchmarks"
 
@@ -21,7 +20,7 @@ directory bench_dir do
     action :create
 end
 
-remote_file "#{bench_dir}/#{dfsioe_jar}" do
+cookbook_file "#{bench_dir}/#{dfsioe_jar}" do
     source dfsioe_jar_url
     owner node['hops']['hdfs']['user']
     group node['hops']['group']

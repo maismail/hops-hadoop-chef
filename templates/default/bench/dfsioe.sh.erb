@@ -34,23 +34,23 @@ READ_OPTION="-read -nrFiles ${FILES} -fileSize ${FILESIZE} -bufferSize 131072 -p
 OLD_HADOOP_OPTS=${HADOOP_OPTS:-}
 export HADOOP_OPTS="${HADOOP_OPTS:-} -Dtest.build.data=${INPUT_HDFS} "
 
-DFSIO_WRITE_OUTPUT_FILE="./$LOGDIR/dfsioe_write_results.txt_$DATE"
-DFSIO_WRITE_THROUGHPUT_OUTPUT_FILE="./$LOGDIR/dfsioe_write_throughput_results.csv_$DATE"
-DFSIO_WRITE_LOG_OUTPUT_FILE="./$LOGDIR/dfsioe_write_log.txt_$DATE"
+DFSIO_WRITE_OUTPUT_FILE="./$LOGDIR/dfsioe_write_results.txt"
+DFSIO_WRITE_THROUGHPUT_OUTPUT_FILE="./$LOGDIR/dfsioe_write_throughput_results.csv"
+DFSIO_WRITE_LOG_OUTPUT_FILE="./$LOGDIR/dfsioe_write_log.txt"
 
-DFSIO_READ_OUTPUT_FILE="./$LOGDIR/dfsioe_read_results.txt_$DATE"
-DFSIO_READ_THROUGHPUT_OUTPUT_FILE="./$LOGDIR/dfsioe_read_throughput_results.txt_$DATE"
-DFSIO_READ_LOG_OUTPUT_FILE="./$LOGDIR/dfsioe_read_log.txt_$DATE"
+DFSIO_READ_OUTPUT_FILE="./$LOGDIR/dfsioe_read_results.txt"
+DFSIO_READ_THROUGHPUT_OUTPUT_FILE="./$LOGDIR/dfsioe_read_throughput_results.txt"
+DFSIO_READ_LOG_OUTPUT_FILE="./$LOGDIR/dfsioe_read_log.txt"
 
 echo Running DFSIOe clean job
 echo ===============================================================
-yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIOEnh  -clean -Dtest.build.data=${INPUT_HDFS}
+yarn jar $DFSIO_JAR TestDFSIOEnh  -clean -Dtest.build.data=${INPUT_HDFS}
 
 ./run_nmon.sh
 
 echo Running DFSIOe WRITE job
 echo ===============================================================
-{ yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIOEnh   \
+{ yarn jar $DFSIO_JAR TestDFSIOEnh   \
 -Dtest.build.data=${INPUT_HDFS} \
 -Dmapreduce.map.java.opts="-Dtest.build.data=${INPUT_HDFS} -Xmx1229m"    \
 -Dmapreduce.reduce.java.opts="-Dtest.build.data=${INPUT_HDFS} -Xmx2458m" \
@@ -74,7 +74,7 @@ mkdir -p $NMON_DIR
 
 echo Running DFSIOe READ job
 echo ===============================================================
-{ yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIOEnh   \
+{ yarn jar $DFSIO_JAR TestDFSIOEnh   \
 -Dtest.build.data=${INPUT_HDFS} \
 -Dmapreduce.map.java.opts="-Dtest.build.data=${INPUT_HDFS} -Xmx1229m"    \
 -Dmapreduce.reduce.java.opts="-Dtest.build.data=${INPUT_HDFS} -Xmx2458m" \

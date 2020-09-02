@@ -64,7 +64,7 @@ hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 -Dmapreduce.job.reduces=15 \
 ${ROWS} ${OUTPUT} ;} > ${RESULTSFILE} 2>&1 
 
-NMON_DIR=./$LOGDIR/nmon
+NMON_DIR=./$LOGDIR/nmon-teragen
 mkdir -p $NMON_DIR
 
 ./stop_and_collect_nmon.sh ${NMON_DIR}

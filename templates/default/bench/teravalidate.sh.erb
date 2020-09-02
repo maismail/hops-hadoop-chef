@@ -57,7 +57,7 @@ hadoop fs -rm -r -f -skipTrash ${REPORT}
 -Dmapreduce.reduce.tasks=30 \
 ${OUTPUT} ${REPORT} ; } > ${RESULTSFILE} 2>&1 
 
-NMON_DIR=./$LOGDIR/nmon
+NMON_DIR=./$LOGDIR/nmon-teravalidate
 mkdir -p $NMON_DIR
 
 ./stop_and_collect_nmon.sh ${NMON_DIR}

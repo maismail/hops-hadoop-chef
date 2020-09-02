@@ -59,7 +59,7 @@ hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 -Dmapreduce.input.fileinputformat.split.minsize=134217728 \
 ${INPUT} ${OUTPUT} ;} > ${RESULTSFILE} 2>&1 
 
-NMON_DIR=./$LOGDIR/nmon
+NMON_DIR=./$LOGDIR/nmon-terasort
 mkdir -p $NMON_DIR
 
 ./stop_and_collect_nmon.sh ${NMON_DIR}
