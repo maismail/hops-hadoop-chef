@@ -26,16 +26,15 @@ ROWS=100000000
 #ROWS=10000000
 
 
-LOGDIR=logs/terasort/$SIZE
+DATE=`date +%Y-%m-%d-%H-%M-%S`
+LOGDIR=logs/terasort/$SIZE/$DATE
 
 if [ ! -d "$LOGDIR" ]
 then
     mkdir -p ./$LOGDIR
 fi
 
-DATE=`date +%Y-%m-%d:%H:%M:%S`
-
-RESULTSFILE="./$LOGDIR/teragen_results_$DATE"
+RESULTSFILE="./$LOGDIR/teragen_results.txt"
 
 
 MR_EXAMPLES_JAR=<%= node['hops']['share_dir']%>/mapreduce/hadoop-mapreduce-examples-*.jar
@@ -46,6 +45,8 @@ OUTPUT=/data/sandbox/poc/teragen/${SIZE}-terasort-input
 mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
 # Delete the output directory
 hadoop fs -rm -r -f -skipTrash ${OUTPUT}
+
+./run_nmon.sh
 
 # Run teragen
 { time hadoop jar $MR_EXAMPLES_JAR teragen \
@@ -62,3 +63,8 @@ hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 -Dmapreduce.job.maps=30 \
 -Dmapreduce.job.reduces=15 \
 ${ROWS} ${OUTPUT} ;} > ${RESULTSFILE} 2>&1 
+
+NMON_DIR=./$LOGDIR/nmon
+mkdir -p $NMON_DIR
+
+./stop_and_collect_nmon.sh ${NMON_DIR}

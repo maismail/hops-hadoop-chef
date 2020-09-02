@@ -19,16 +19,16 @@ MR_EXAMPLES_JAR=<%= node['hops']['share_dir']%>/mapreduce/hadoop-mapreduce-examp
 SIZE=10G
 
 
-LOGDIR=logs/terasort/$SIZE
+DATE=`date +%Y-%m-%d-%H-%M-%S`
+LOGDIR=logs/terasort/$SIZE/$DATE
 
 if [ ! -d "$LOGDIR" ]
 then
     mkdir -p ./$LOGDIR
 fi
 
-DATE=`date +%Y-%m-%d:%H:%M:%S`
 
-RESULTSFILE="./$LOGDIR/teravalidate_results_$DATE"
+RESULTSFILE="./$LOGDIR/teravalidate_result.txt"
 
 
 OUTPUT=/data/sandbox/poc/teragen/${SIZE}-terasort-output
@@ -40,6 +40,9 @@ REPORT=/data/sandbox/poc/teragen/${SIZE}-terasort-report
 mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
 # Delete the output directory
 hadoop fs -rm -r -f -skipTrash ${REPORT}
+
+./run_nmon.sh
+
 # Run teravalidate
 { time hadoop jar $MR_EXAMPLES_JAR teravalidate \
 -Dmapreduce.map.cpu.vcores=1 \
@@ -53,3 +56,8 @@ hadoop fs -rm -r -f -skipTrash ${REPORT}
 -Dmapreduce.map.tasks=30 \
 -Dmapreduce.reduce.tasks=30 \
 ${OUTPUT} ${REPORT} ; } > ${RESULTSFILE} 2>&1 
+
+NMON_DIR=./$LOGDIR/nmon
+mkdir -p $NMON_DIR
+
+./stop_and_collect_nmon.sh ${NMON_DIR}

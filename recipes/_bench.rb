@@ -1,3 +1,15 @@
+package "nmon" do
+    action :install
+end
+
+package "pssh" do
+    action :install
+end
+
+package "tmux" do
+    action :install
+end
+
 dfsioe_jar = "autogen-8.0-SNAPSHOT-jar-with-dependencies.jar"
 dfsioe_jar_url = "https://repo.hops.works/dev/maism/HiBench/#{dfsioe_jar}"
 
@@ -60,6 +72,45 @@ end
 
 template "#{bench_dir}/teravalidate.sh" do
     source "bench/teravalidate.sh.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode 0750
+end
+
+bench_nodes = node['hops']['_bench_node']['private_ips'].join("\n")
+bench_nodes += "\n"
+
+file "#{bench_dir}/bench_nodes" do
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode '644'
+    content bench_nodes.to_s
+    action :create
+end
+
+kagent_keys node['hops']['hdfs']['user-home'] do
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    action :generate
+end
+
+kagent_keys node['hops']['hdfs']['user-home'] do
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    cb_name "hops"
+    cb_recipe "_bench"
+    action :return_publickey
+end
+
+template "#{bench_dir}/run_nmon.sh" do
+    source "bench/run_nmon.sh.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode 0750
+end
+
+template "#{bench_dir}/stop_and_collect_nmon.sh" do
+    source "bench/stop_and_collect_nmon.sh.erb"
     owner node['hops']['hdfs']['user']
     group node['hops']['group']
     mode 0750

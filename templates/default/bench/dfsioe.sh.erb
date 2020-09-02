@@ -18,14 +18,14 @@ FILES=10
 #FileSize in MB
 FILESIZE=1024
 
-LOGDIR=logs/dfsioe/$FILESIZE
+DATE=`date +%Y-%m-%d-%H-%M-%S`
+
+LOGDIR=logs/dfsioe/$FILESIZE/$DATE
 
 if [ ! -d "$LOGDIR" ]
 then
     mkdir -p ./$LOGDIR
 fi
-
-DATE=`date +%Y-%m-%d:%H:%M:%S`
 
 INPUT_HDFS="/dfsioe-test"
 WRITE_OPTION="-write -nrFiles ${FILES} -fileSize ${FILESIZE} -bufferSize 4096 -plotInteval 1000 -sampleUnit m -sampleInteval 200 -sumThreshold 0.5 -tputReportTotal"
@@ -46,6 +46,8 @@ echo Running DFSIOe clean job
 echo ===============================================================
 yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIOEnh  -clean -Dtest.build.data=${INPUT_HDFS}
 
+./run_nmon.sh
+
 echo Running DFSIOe WRITE job
 echo ===============================================================
 { yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIOEnh   \
@@ -63,6 +65,13 @@ echo ===============================================================
 ${WRITE_OPTION} -resFile ${DFSIO_WRITE_OUTPUT_FILE}  \
 -tputFile ${DFSIO_WRITE_THROUGHPUT_OUTPUT_FILE} ;} > ${DFSIO_WRITE_LOG_OUTPUT_FILE} 2>&1
 
+NMON_DIR=./$LOGDIR/nmon-write
+mkdir -p $NMON_DIR
+
+./stop_and_collect_nmon.sh ${NMON_DIR}
+
+./run_nmon.sh
+
 echo Running DFSIOe READ job
 echo ===============================================================
 { yarn jar $DFSIO_JAR org.apache.hadoop.fs.dfsioe.TestDFSIOEnh   \
@@ -79,5 +88,10 @@ echo ===============================================================
 -Dmapred.tasktracker.reduce.tasks.maximum=2 \
 ${READ_OPTION} -resFile ${DFSIO_READ_OUTPUT_FILE}  \
 -tputFile ${DFSIO_READ_THROUGHPUT_OUTPUT_FILE} ; } > ${DFSIO_READ_LOG_OUTPUT_FILE} 2>&1
+
+NMON_DIR=./$LOGDIR/nmon-read
+mkdir -p $NMON_DIR
+
+./stop_and_collect_nmon.sh ${NMON_DIR}
 
 export HADOOP_OPTS="$OLD_HADOOP_OPTS"

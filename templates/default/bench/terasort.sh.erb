@@ -21,16 +21,15 @@ SIZE=10G
 #OUTPUT=/${SIZE}-terasort-output
 
 
-LOGDIR=logs/terasort/$SIZE
+DATE=`date +%Y-%m-%d-%H-%M-%S`
+LOGDIR=logs/terasort/$SIZE/$DATE
 
 if [ ! -d "$LOGDIR" ]
 then
     mkdir -p ./$LOGDIR
 fi
 
-DATE=`date +%Y-%m-%d:%H:%M:%S`
-
-RESULTSFILE="./$LOGDIR/terasort_results_$DATE"
+RESULTSFILE="./$LOGDIR/terasort_results.txt"
 
 
 INPUT=/data/sandbox/poc/teragen/${SIZE}-terasort-input
@@ -41,6 +40,8 @@ OUTPUT=/data/sandbox/poc/teragen/${SIZE}-terasort-output
 mapred job -list | grep job_ | awk ' { system("mapred job -kill " $1) } '
 # Delete the output directory
 hadoop fs -rm -r -f -skipTrash ${OUTPUT}
+
+./run_nmon.sh
 
 # Run terasort
 { time hadoop jar $MR_EXAMPLES_JAR terasort \
@@ -57,5 +58,10 @@ hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 -Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -Dmapreduce.input.fileinputformat.split.minsize=134217728 \
 ${INPUT} ${OUTPUT} ;} > ${RESULTSFILE} 2>&1 
+
+NMON_DIR=./$LOGDIR/nmon
+mkdir -p $NMON_DIR
+
+./stop_and_collect_nmon.sh ${NMON_DIR}
 
 #-Dmapreduce.job.maps=90 \
