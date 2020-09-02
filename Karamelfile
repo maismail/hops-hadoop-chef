@@ -45,3 +45,9 @@ dependencies:
     global:
       - consul::master
       - consul::slave
+  - recipe: hops::_bench
+    global:
+      - hops::nn
+  - recipe: hops::_bench_node
+    global:
+      - hops::_bench
