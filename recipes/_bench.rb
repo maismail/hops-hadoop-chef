@@ -1,7 +1,3 @@
-package "nmon" do
-    action :install
-end
-
 package "pssh" do
     action :install
 end
@@ -21,7 +17,7 @@ directory bench_dir do
 end
 
 cookbook_file "#{bench_dir}/#{dfsioe_jar}" do
-    source dfsioe_jar_url
+    source dfsioe_jar
     owner node['hops']['hdfs']['user']
     group node['hops']['group']
     mode "755"

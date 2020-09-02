@@ -7,15 +7,15 @@ export PATH=<%=node['hops']['bin_dir']%>:$PATH
 TEST_DIR=$1
 DST_DIR=$2
 
-LOGDIR=logs/dfsops
+DATE=`date +%Y-%m-%d-%H-%M-%S`
+LOGDIR=logs/dfsops/$DATE
 
 if [ ! -d "$LOGDIR" ]
 then
     mkdir -p ./$LOGDIR
 fi
 
-DATE=`date +%Y-%m-%d:%H:%M:%S`
-RESULTS=${LOGDIR}/${DATE}_op
+RESULTS=${LOGDIR}/op
 
 echo Running LS 
 echo ===============================================================
