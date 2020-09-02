@@ -2,35 +2,14 @@
 
 trap "" HUP
 
-#if [ $EUID -eq 0 ]; then
-#   echo "this script must not be run as root. su to hdfs user to run"
-#   exit 1
-#fi
+SIZE=$1
+ROWS=$2
 
 source <%=node['hops']['conf_dir']%>/hadoop-env.sh 
 export PATH=<%=node['hops']['bin_dir']%>:$PATH
 
-#SIZE=500G
-#ROWS=5000000000
-
-#SIZE=100G
-#ROWS=1000000000
-
-# SIZE=1T
-# ROWS=10000000000
-
-SIZE=10G
-ROWS=100000000
-
-#SIZE=1G
-#ROWS=10000000
-
-#SIZE=50G
-#ROWS=500000000
-
-
 DATE=`date +%Y-%m-%d-%H-%M-%S`
-LOGDIR=logs/terasort/$SIZE/$DATE
+LOGDIR=logs/terasort/$SIZE/teragen/$DATE
 
 if [ ! -d "$LOGDIR" ]
 then
@@ -63,8 +42,8 @@ hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 -Dmapreduce.task.io.sort.factor=48 \
 -Dmapreduce.map.output.compress=true \
 -Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
--Dmapreduce.job.maps=30 \
--Dmapreduce.job.reduces=15 \
+-Dmapreduce.job.maps=64 \
+-Dmapreduce.job.reduces=32 \
 ${ROWS} ${OUTPUT} ;} > ${RESULTSFILE} 2>&1 
 
 NMON_DIR=./$LOGDIR/nmon-teragen

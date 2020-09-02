@@ -5,7 +5,6 @@ source <%=node['hops']['conf_dir']%>/hadoop-env.sh
 export PATH=<%=node['hops']['bin_dir']%>:$PATH
 
 TEST_DIR=$1
-DST_DIR=$2
 
 DATE=`date +%Y-%m-%d-%H-%M-%S`
 LOGDIR=logs/dfsops/$DATE
@@ -17,25 +16,27 @@ fi
 
 RESULTS=${LOGDIR}/op
 
-echo Running LS 
-echo ===============================================================
+TIMES=3
+counter=0
 
-{ time hdfs dfs -ls ${TEST_DIR} ; } > ${RESULTS}_ls 2>&1
+while [  $counter -lt $TIMES ]; do
+    echo Running LS 
+    echo ===============================================================
 
-TEST_DIR_NEW=${TEST_DIR}_new
+    { time hdfs dfs -ls ${TEST_DIR} ; } > ${RESULTS}_ls_${counter} 2>&1
 
-echo Running Rename 
-echo ===============================================================
+    echo Running mv 
+    echo ===============================================================
 
-{ time hdfs dfs -mv ${TEST_DIR} ${TEST_DIR_NEW} ; } > ${RESULTS}_rename 2>&1
+    OLD_TEST_DIR=${TEST_DIR}
+    TEST_DIR=${TEST_DIR}_new_${counter}
 
-echo Running Move 
-echo ===============================================================
+    { time hdfs dfs -mv ${OLD_TEST_DIR} ${TEST_DIR} ; } > ${RESULTS}_mv_${counter} 2>&1
 
-DIR_NAME=`basename ${TEST_DIR_NEW}`
-{ time hdfs dfs -mv ${TEST_DIR_NEW} ${DST_DIR} ; } > ${RESULTS}_mv 2>&1
+    let counter+=1
+done
 
 echo Running DELETE 
 echo ===============================================================
 
-{ time hdfs dfs -rm -r ${DST_DIR}/${DIR_NAME} ; } > ${RESULTS}_delete 2>&1
+{ time hdfs dfs -rm -r ${TEST_DIR} ; } > ${RESULTS}_delete 2>&1

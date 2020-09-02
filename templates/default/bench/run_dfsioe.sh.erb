@@ -1,0 +1,19 @@
+#!/bin/bash
+
+FILES=64
+#FileSize in MB
+FILESIZE=1024
+
+TIMES=3
+counter=0
+
+while [  $counter -lt $TIMES ]; do
+    echo "Running dfsioe ${counter}/${TIMES}"
+    
+    ./dfsioe.sh $FILES $FILESIZE
+    sleep 2
+    
+    let counter+=1
+done
+
+

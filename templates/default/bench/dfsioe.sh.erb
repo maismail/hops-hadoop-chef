@@ -2,21 +2,15 @@
 
 trap "" HUP
 
-#if [ $EUID -eq 0 ]; then
-#   echo "this script must not be run as root. su to hdfs user to run"
-#   exit 1
-#fi
-
-
 source <%=node['hops']['conf_dir']%>/hadoop-env.sh 
 
 export PATH=<%=node['hops']['bin_dir']%>:$PATH
 
 DFSIO_JAR=<%= @dfsio_jar%>
 
-FILES=10
+FILES=$1
 #FileSize in MB
-FILESIZE=1024
+FILESIZE=$2
 
 DATE=`date +%Y-%m-%d-%H-%M-%S`
 
@@ -60,8 +54,8 @@ echo ===============================================================
 -Dmapreduce.reduce.memory.mb=3072 \
 -Dmapreduce.task.io.sort.mb=200 \
 -Dmapreduce.task.io.sort.factor=48 \
--Dmapred.tasktracker.map.tasks.maximum=5 \
--Dmapred.tasktracker.reduce.tasks.maximum=2 \
+-Dmapred.tasktracker.map.tasks.maximum=16 \
+-Dmapred.tasktracker.reduce.tasks.maximum=8 \
 ${WRITE_OPTION} -resFile ${DFSIO_WRITE_OUTPUT_FILE}  \
 -tputFile ${DFSIO_WRITE_THROUGHPUT_OUTPUT_FILE} ;} > ${DFSIO_WRITE_LOG_OUTPUT_FILE} 2>&1
 
@@ -84,8 +78,8 @@ echo ===============================================================
 -Dmapreduce.reduce.memory.mb=3072 \
 -Dmapreduce.task.io.sort.mb=200 \
 -Dmapreduce.task.io.sort.factor=48 \
--Dmapred.tasktracker.map.tasks.maximum=5 \
--Dmapred.tasktracker.reduce.tasks.maximum=2 \
+-Dmapred.tasktracker.map.tasks.maximum=16 \
+-Dmapred.tasktracker.reduce.tasks.maximum=8 \
 ${READ_OPTION} -resFile ${DFSIO_READ_OUTPUT_FILE}  \
 -tputFile ${DFSIO_READ_THROUGHPUT_OUTPUT_FILE} ; } > ${DFSIO_READ_LOG_OUTPUT_FILE} 2>&1
 

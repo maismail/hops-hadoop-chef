@@ -44,6 +44,13 @@ template "#{bench_dir}/dfsioe.sh" do
     })
 end
 
+template "#{bench_dir}/run_dfsioe.sh" do
+    source "bench/run_dfsioe.sh.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode 0750
+end
+
 template "#{bench_dir}/dfsops.sh" do
     source "bench/dfsops.sh.erb"
     owner node['hops']['hdfs']['user']
@@ -67,6 +74,13 @@ end
 
 template "#{bench_dir}/teravalidate.sh" do
     source "bench/teravalidate.sh.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode 0750
+end
+
+template "#{bench_dir}/run_terabench.sh" do
+    source "bench/run_terabench.sh.erb"
     owner node['hops']['hdfs']['user']
     group node['hops']['group']
     mode 0750

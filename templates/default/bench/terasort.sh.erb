@@ -12,19 +12,10 @@ export PATH=<%=node['hops']['bin_dir']%>:$PATH
 
 MR_EXAMPLES_JAR=<%= node['hops']['share_dir']%>/mapreduce/hadoop-mapreduce-examples-*.jar
 
-#SIZE=500G
-#SIZE=100G
-#SIZE=1T
-#SIZE=1G
-SIZE=10G
-#SIZE=50G
-
-#INPUT=/${SIZE}-terasort-input
-#OUTPUT=/${SIZE}-terasort-output
-
+SIZE=$1
 
 DATE=`date +%Y-%m-%d-%H-%M-%S`
-LOGDIR=logs/terasort/$SIZE/$DATE
+LOGDIR=logs/terasort/$SIZE/terasort/$DATE
 
 if [ ! -d "$LOGDIR" ]
 then
@@ -55,7 +46,7 @@ hadoop fs -rm -r -f -skipTrash ${OUTPUT}
 -Dmapreduce.reduce.java.opts=-Xmx2458m \
 -Dmapreduce.task.io.sort.mb=200 \
 -Dmapreduce.task.io.sort.factor=48 \
--Dmapreduce.job.reduces=15 \
+-Dmapreduce.job.reduces=32 \
 -Dmapreduce.map.output.compress=true \
 -Dmapreduce.map.output.compress.codec=org.apache.hadoop.io.compress.Lz4Codec \
 -Dmapreduce.input.fileinputformat.split.minsize=134217728 \

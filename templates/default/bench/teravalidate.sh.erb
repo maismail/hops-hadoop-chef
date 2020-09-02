@@ -12,15 +12,10 @@ export PATH=<%=node['hops']['bin_dir']%>:$PATH
 
 MR_EXAMPLES_JAR=<%= node['hops']['share_dir']%>/mapreduce/hadoop-mapreduce-examples-*.jar
 
-#SIZE=500G
-#SIZE=100G
-#SIZE=1T
-#SIZE=1G
-SIZE=10G
-#SIZE=50G
+SIZE=$1
 
 DATE=`date +%Y-%m-%d-%H-%M-%S`
-LOGDIR=logs/terasort/$SIZE/$DATE
+LOGDIR=logs/terasort/$SIZE/teravalidate/$DATE
 
 if [ ! -d "$LOGDIR" ]
 then
@@ -53,8 +48,8 @@ hadoop fs -rm -r -f -skipTrash ${REPORT}
 -Dmapreduce.reduce.java.opts=-Xmx2458m \
 -Dmapreduce.task.io.sort.mb=200 \
 -Dmapreduce.task.io.sort.factor=48 \
--Dmapreduce.map.tasks=30 \
--Dmapreduce.reduce.tasks=30 \
+-Dmapreduce.map.tasks=64 \
+-Dmapreduce.reduce.tasks=32 \
 ${OUTPUT} ${REPORT} ; } > ${RESULTSFILE} 2>&1 
 
 NMON_DIR=./$LOGDIR/nmon-teravalidate
