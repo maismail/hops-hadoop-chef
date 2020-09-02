@@ -37,6 +37,13 @@ template "#{bench_dir}/dfsioe.sh" do
     })
 end
 
+template "#{bench_dir}/dfsops.sh" do
+    source "bench/dfsops.sh.erb"
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode 0750
+end
+
 template "#{bench_dir}/teragen.sh" do
     source "bench/teragen.sh.erb"
     owner node['hops']['hdfs']['user']
