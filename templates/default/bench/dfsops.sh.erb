@@ -39,4 +39,4 @@ done
 echo Running DELETE 
 echo ===============================================================
 
-{ time hdfs dfs -rm -r ${TEST_DIR} ; } > ${RESULTS}_delete 2>&1
+{ time hdfs dfs -rm -r -skipTrash ${TEST_DIR} ; } > ${RESULTS}_delete 2>&1
