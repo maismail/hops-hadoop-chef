@@ -89,14 +89,14 @@ file "#{bench_dir}/bench_nodes" do
 end
 
 kagent_keys node['hops']['hdfs']['user-home'] do
-    owner node['hops']['hdfs']['user']
-    group node['hops']['group']
+    cb_user node['hops']['hdfs']['user']
+    cb_group node['hops']['group']
     action :generate
 end
 
 kagent_keys node['hops']['hdfs']['user-home'] do
-    owner node['hops']['hdfs']['user']
-    group node['hops']['group']
+    cb_user node['hops']['hdfs']['user']
+    cb_group node['hops']['group']
     cb_name "hops"
     cb_recipe "_bench"
     action :return_publickey
